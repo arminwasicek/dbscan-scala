@@ -1,14 +1,17 @@
 package com.esri.dbscan
 
-import com.esri.core.geometry.Point2D
 import com.esri.smear.Smear
-
+import org.apache.commons.math3.ml.clustering.DoublePoint
+import org.apache.commons.math3.ml.distance.{DistanceMeasure, EuclideanDistance}
+import com.esri.dbscan.Flag
 /**
   */
-class DBSCANPoint(val id: Int, val point: Point2D) extends Serializable {
+class DBSCANPoint(val id: Int, val point: DoublePoint) extends Serializable {
 
   var flag = Flag.BORDER
-  var clusterID = -1
+  var clusterID : Int = -1
+  val dist : DistanceMeasure = new EuclideanDistance
+
 
   override def equals(other: Any): Boolean = other match {
     case that: DBSCANPoint => id == that.id
@@ -19,19 +22,16 @@ class DBSCANPoint(val id: Int, val point: Point2D) extends Serializable {
     Smear.smear(id)
   }
 
-  def x() = point.x
-
-  def y() = point.y
-
-  def distance2(that: DBSCANPoint) = {
-    Point2D.sqrDistance(point, that.point)
+  def distance2(that: DBSCANPoint) : Double = {
+    val d = dist.compute(point.getPoint, that.point.getPoint)
+    d*d
   }
 
-  override def toString = s"DBSCANPoint($id,${point.x},${point.y},$flag,$clusterID)"
+  override def toString = s"DBSCANPoint($id,$point,$flag,$clusterID)"
 }
 
 object DBSCANPoint extends Serializable {
-  def apply(id: Int, x: Double, y: Double) = {
-    new DBSCANPoint(id, new Point2D(x, y))
+  def apply(id: Int, p: Array[Double]) : DBSCANPoint = {
+    new DBSCANPoint(id, new DoublePoint(p))
   }
 }

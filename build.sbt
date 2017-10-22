@@ -18,12 +18,13 @@ libraryDependencies ++= Seq(
   "com.esri.geometry" % "esri-geometry-api" % "1.2.1",
   "org.scalatest" %% "scalatest" % "2.2.1" % "test"
 )
+libraryDependencies += "org.apache.commons" % "commons-math3" % "3.6"
 
 publishMavenStyle := true
 
 publishArtifact in Test := false
 
-pomExtra := (
+pomExtra :=
   <url>https://github.com/mraad/dbscan-scala</url>
     <licenses>
       <license>
@@ -44,4 +45,4 @@ pomExtra := (
         <email>mraad@esri.com</email>
       </developer>
     </developers>
-  )
+
