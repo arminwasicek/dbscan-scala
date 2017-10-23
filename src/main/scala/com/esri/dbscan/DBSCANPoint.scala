@@ -1,16 +1,15 @@
 package com.esri.dbscan
 
-import com.esri.smear.Smear
 import org.apache.commons.math3.ml.clustering.DoublePoint
 import org.apache.commons.math3.ml.distance.{DistanceMeasure, EuclideanDistance}
-import com.esri.dbscan.Flag
+
 /**
   */
-class DBSCANPoint(val id: Int, val point: DoublePoint) extends Serializable {
+class DBSCANPoint(val id: Int, val point: DoublePoint, dist : DistanceMeasure = new EuclideanDistance)
+  extends Serializable {
 
   var flag = Flag.BORDER
   var clusterID : Int = -1
-  val dist : DistanceMeasure = new EuclideanDistance
 
 
   override def equals(other: Any): Boolean = other match {
@@ -19,7 +18,7 @@ class DBSCANPoint(val id: Int, val point: DoublePoint) extends Serializable {
   }
 
   override def hashCode(): Int = {
-    Smear.smear(id)
+    DBSCANPoint.smear(id)
   }
 
   def distance2(that: DBSCANPoint) : Double = {
@@ -30,8 +29,17 @@ class DBSCANPoint(val id: Int, val point: DoublePoint) extends Serializable {
   override def toString = s"DBSCANPoint($id,$point,$flag,$clusterID)"
 }
 
+object Flag extends Enumeration {
+  val CORE, NOISE, BORDER = Value
+}
+
 object DBSCANPoint extends Serializable {
   def apply(id: Int, p: Array[Double]) : DBSCANPoint = {
     new DBSCANPoint(id, new DoublePoint(p))
+  }
+
+  def smear(hashCode: Int) = {
+    val hashCode2 = hashCode ^ ((hashCode >>> 20) ^ (hashCode >>> 12))
+    hashCode2 ^ (hashCode2 >>> 7) ^ (hashCode2 >>> 4)
   }
 }

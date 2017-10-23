@@ -1,23 +1,16 @@
 organization := "com.esri"
 name := "dbscan-scala"
-version := "0.1"
-description := "DBSCAN implementation in Scala using Esri Geometry Library"
+version := "0.4"
+description := "DBSCAN implementation in Scala using Apache Commons Math"
 homepage := Some(url(s"https://github.com/mraad/${name.value}#readme"))
 isSnapshot := true
 
 scalaVersion := "2.10.5"
 crossScalaVersions := Seq("2.10.5", "2.11.6")
 
-bintrayPackageLabels := Seq("DBSCAN", "Esri Geometry Library")
-
 licenses +=("Apache-2.0", url("https://www.apache.org/licenses/LICENSE-2.0.html"))
 
-resolvers += "Local Maven Repository" at "file:///" + Path.userHome + "/.m2/repository"
-
-libraryDependencies ++= Seq(
-  "com.esri.geometry" % "esri-geometry-api" % "1.2.1",
-  "org.scalatest" %% "scalatest" % "2.2.1" % "test"
-)
+libraryDependencies += "org.scalatest" %% "scalatest" % "2.2.1" % "test"
 libraryDependencies += "org.apache.commons" % "commons-math3" % "3.6"
 
 publishMavenStyle := true

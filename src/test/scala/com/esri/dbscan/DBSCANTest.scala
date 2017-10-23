@@ -1,10 +1,10 @@
 package com.esri.dbscan
 
 import org.scalatest._
-
 import scala.io.Source
 
 class DBSCANTest extends FlatSpec with Matchers {
+
 
   "DBSCAN" should "cluster" in {
     val points = Array(
